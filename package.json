@@ -1,0 +1,14 @@
+{
+    "name": "meu-projeto-php",
+    "version": "1.0.0",
+    "description": "Dependências de frontend para compilar Tailwind CSS.",
+    "scripts": {
+        "build": "tailwindcss -i ./src/input.css -o ./public/assets/css/application.css --minify",
+        "watch": "tailwindcss -i ./src/input.css -o ./public/assets/css/application.css --watch"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.19",
+        "postcss": "^8.4.38",
+        "tailwindcss": "^3.4.3"
+    }
+}

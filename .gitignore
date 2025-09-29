@@ -1,0 +1,11 @@
+# Ignore VS Code settings
+.vscode/
+
+# Ignore HTML folder
+.html/
+
+.node_modules
+
+# Ignore logs and temporary files
+*.log
+*.tmp
