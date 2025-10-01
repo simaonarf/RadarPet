@@ -1,8 +1,8 @@
 # Ignore VS Code settings
 .vscode/
 
-# Ignore HTML folder
-.html/
+# Igonore TailwindCSS config
+public/assets/css/application.css
 
 .node_modules
 
