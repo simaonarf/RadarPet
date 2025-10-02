@@ -4,7 +4,9 @@
 # Igonore TailwindCSS config
 public/assets/css/application.css
 
-.node_modules
+database/
+node_modules/
+package-lock.json
 
 # Ignore logs and temporary files
 *.log
