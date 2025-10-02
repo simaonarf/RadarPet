@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/assets/css/application.css">
 </head>
 
-<body class="bg-gray-200 text-white">
+<body class="bg-gray-100 text-white">
 <h1 class="text-3xl font-bold text-blue-600 p-10">
     RadarPet
 </h1>
