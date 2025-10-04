@@ -4,10 +4,19 @@
 # Igonore TailwindCSS config
 public/assets/css/application.css
 
-database/
 node_modules/
 package-lock.json
+composer.lock
 
 # Ignore logs and temporary files
 *.log
 *.tmp
+
+# Ignore vendor folder
+/vendor/
+
+# Ignore cache folder
+.cache/*
+
+# Ignore .env
+.env
