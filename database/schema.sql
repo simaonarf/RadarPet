@@ -1,11 +1,12 @@
-SET foreign_key_checks = 0;
-
-DROP TABLE IF EXISTS users;
-
-CREATE TABLE admins (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    encrypted_password VARCHAR(255) NOT NULL
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(120) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('admin','user') NOT NULL DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-SET foreign_key_checks = 1;
+INSERT INTO users (name,email,password_hash,role) VALUES
+('Admin Demo','admin@demo.com','$2y$12$T6GN8tPghB0kKUDeZ9ugwuymn/qRLrbQ5Z7JPcSKFBe5k7knzSvV2','admin'),
+('Usuário Demo','user@demo.com','$2y$12$20lAQ7dtQ8KHCE2v13vjr.IYotH5Ax6Odh06imUT8cZA/RBgI2L8K','user');
