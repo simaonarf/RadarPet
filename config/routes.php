@@ -13,3 +13,4 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::get('/login', [AuthController::class, 'showlogin'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/admin', [HomeController::class, 'admin'])->name('admin.index');

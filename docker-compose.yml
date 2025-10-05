@@ -10,6 +10,7 @@ services:
       - "8080:8080"
     networks:
       - app-network
+
   php:
     build:
       context: .
@@ -17,6 +18,8 @@ services:
     working_dir: /var/www
     volumes:
       - .:/var/www
+    env_file:
+      - .env
     networks:
       - app-network
     depends_on:
@@ -27,10 +30,10 @@ services:
     env_file:
       - .env
     environment:
-      MYSQL_DATABASE: "$DB_DATABASE"
-      MYSQL_USER: "$DB_USERNAME"
-      MYSQL_PASSWORD: "$DB_PASSWORD"
-      MYSQL_ROOT_PASSWORD: "DB_ROOT_PASSWORD"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - dbdata:/var/lib/mysql
     networks:
