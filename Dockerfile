@@ -4,4 +4,8 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-enable pdo_mysql
 
 RUN apt-get update -y && apt-get install -y libzip-dev zip
-RUN docker-php-ext-install zip  
+RUN docker-php-ext-install zip 
+
+# ---add, alan ---
+RUN apt-get update -y && apt-get install -y libxml2-dev
+RUN docker-php-ext-install dom
