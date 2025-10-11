@@ -1,16 +1,20 @@
 <?php
+use Core\Router\Route; 
 
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
-use Core\Router\Route;
+use App\Controllers\AdminController;
 
+// ROTAS PÚBLICAS
 
-// Home
-Route::get('/', [HomeController::class, 'index'])->name('root');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
-// Authentication
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::get('/login', [AuthController::class, 'showlogin'])->name('login');
+// ROTAS DE AUTENTICAÇÃO
+
+// Route::get('/register', [AuthController::class, 'showRegister'])->name('register'); 
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/admin', [HomeController::class, 'admin'])->name('admin.index');
+Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
+
+// ROTAS DO PAINEL ADM
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');

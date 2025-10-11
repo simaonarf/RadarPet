@@ -19,14 +19,14 @@
             <form id="loginForm" method="post" action="/login">
                 <div class="mb-4 mt-3">
                     <label for="email" class="text-black">E-mail</label>
-                    <input id="email" name="email" type="email" autocomplete="username"
+                    <input id="email" name="user[email]" type="email" autocomplete="username"
                         class="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-blue-400 focus:ring-0"
                         placeholder="Seu E-mail">
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="text-black">Senha</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password"
+                    <input id="password" name="user[password]" type="password" autocomplete="current-password"
                         class="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-blue-400 focus:ring-0"
                         placeholder="Senha">
                 </div>
