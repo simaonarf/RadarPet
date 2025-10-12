@@ -2,7 +2,7 @@
 
 namespace Tests\Browser;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class IndexTest extends TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-
+//require 'var/www/core/Debug/Debugger.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use Core\Env\EnvLoader;
