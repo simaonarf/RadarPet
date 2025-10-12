@@ -13,7 +13,7 @@ class AdminController extends Controller
     {
         $user = Auth::user();
         if (!$user || !$user->isAdmin()) {
-            $this->redirectTo(route('users.login'));
+            $this->redirectTo(route('login'));
             exit;
         }
     }
