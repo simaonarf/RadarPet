@@ -21,7 +21,7 @@ class AdminController extends Controller
     public function index(): void
     {
         $this->requireAdminLogin();
-        
+
         $title = 'Painel Administrativo';
 
         $this->render('admin/index', compact('title'));

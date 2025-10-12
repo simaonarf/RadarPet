@@ -14,9 +14,9 @@ class UsersPopulate
         $admin = new User();
         $admin->name = 'Administrador';
         $admin->email = 'admin@demo.com';
-        $admin->password = 'admin123'; 
+        $admin->password = 'admin123';
         $admin->role = 'admin';
-            
+
         $admin->save();
         echo "admin@demo.com' criado com sucesso!\n";
 
@@ -31,7 +31,5 @@ class UsersPopulate
         echo "user@demo.com' criado com sucesso!\n";
 
         $user->save();
-            
-
     }
 }
