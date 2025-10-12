@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Create .env
-        run: cp .env.example .env
+        run: cp .env .env
 
       - name: Composer install
         run: ./run composer install
@@ -43,7 +43,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Create .env
-        run: cp .env.example .env
+        run: cp .env .env
 
       - name: Composer install
         run: ./run composer install
@@ -70,7 +70,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Create .env
-        run: cp .env.example .env
+        run: cp .env .env
 
       - name: Composer install
         run: ./run composer install
