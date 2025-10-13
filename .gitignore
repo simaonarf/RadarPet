@@ -20,3 +20,4 @@ composer.lock
 
 # Ignore .env
 .env
+.env
