@@ -45,6 +45,10 @@ function test {
   docker compose run --rm php ./vendor/bin/phpunit --color ${TEST_PATH}
 }
 
+function codecept {
+    docker compose run --rm php_test ./vendor/bin/codecept ${@}
+}
+
 function phpcs {
   TEST_PATH="${@:-.}"
   docker compose run --rm php ./vendor/bin/phpcs ${TEST_PATH}
