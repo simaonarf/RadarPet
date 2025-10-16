@@ -7,7 +7,6 @@ use App\Controllers\AuthController;
 use App\Controllers\AdminController;
 
 // ROTAS PÚBLICAS
-
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 // ROTAS DE AUTENTICACAO
@@ -20,6 +19,9 @@ Route::middleware('auth')->group(function () {
     // Route::get('/register', [AuthController::class, 'showRegister'])->name('register'); 
     Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
 
+
+    Route::middleware('admin')->group(function () {
     // ROTAS DO PAINEL ADM
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    });
 });
