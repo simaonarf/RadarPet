@@ -10,6 +10,8 @@ services:
       - "8080:8080"
     networks:
       - app-network
+    depends_on:
+      - php
 
   php:
     build:
@@ -27,6 +29,8 @@ services:
 
   db:
     image: mysql:8.4.0
+    env_file:
+      - .env
     environment:
       MYSQL_DATABASE: "${DB_DATABASE}"
       MYSQL_USER: "${DB_USERNAME}"
@@ -65,15 +69,6 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: root
       DB_PASSWORD: ""
-
-  tailwind-builder:
-    image: node:lts-alpine
-    container_name: tailwind_builder_RP
-    user: "${UID}:${GID}"
-    working_dir: /app
-    volumes:
-      - ./:/app
-    command: tail -f /dev/null
 
 networks:
   app-network:
