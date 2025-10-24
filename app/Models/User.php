@@ -21,8 +21,11 @@ class User extends Model
     protected static array $columns = ['name', 'email', 'encrypted_password', 'type', 'role', 'register_date'];
 
     protected ?string $password = null;
-/*     protected ?string $password_confirmation = null; */
-
+    
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
 
     public function validates(): void
     {
@@ -35,7 +38,6 @@ class User extends Model
 
         if ($this->newRecord()) {
             Validations::notEmpty('password', $this);
-/*             Validations::passwordConfirmation($this); */
         }
     }
 
