@@ -24,6 +24,8 @@
             <?php endforeach; ?>
 </div> 
 
-<a href="<?= route('posts.new') ?>" class="block text-center text-sm text-green-600 underline mb-6">Adicionar</a>
+<a href="<?= route('posts.new') ?>" class="block text-center text-md text-green-600 underline mb-5">Adicionar</a>
 
-<a href="<?= route('logout') ?>" class="block text-center text-sm text-blue-600 underline">Sair</a>
+<?php $paginator->renderPagesNavigation(); ?>
+
+<a href="<?= route('logout') ?>" class="block text-center text-sm text-red-600 underline mb-5">Sair</a>

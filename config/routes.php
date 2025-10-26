@@ -35,3 +35,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     });
 });
+
+Route::get('/{page}', [HomeController::class, 'index'])->name('posts.paginate');
