@@ -1,16 +1,12 @@
-# Ignore VS Code settings
+# Ignore Visual Studio Code settings
 .vscode/
 
-# Igonore TailwindCSS config
-public/assets/css/application.css
+# Ignore HTML folder
+html
 
-node_modules/
-package-lock.json
-composer.lock
-
-# Ignore logs and temporary files
+# Ignore logs and temporay files
 *.log
-*.tmp
+*.temp
 
 # Ignore vendor folder
 /vendor/
@@ -20,4 +16,7 @@ composer.lock
 
 # Ignore .env
 .env
-.env
+
+# Ignore files and folders inside uploads but keep it
+/public/assets/uploads/*
+!/public/assets/uploads/.gitkeep

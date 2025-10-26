@@ -10,7 +10,7 @@ use Lib\FlashMessage;
 class AdminAuthenticate implements Middleware
 {
     public function handle(Request $request): void
-    {   
+    {
         if (!Auth::check()) {
             return;
         }
@@ -28,5 +28,4 @@ class AdminAuthenticate implements Middleware
         header('Location: ' . $location);
         exit;
     }
-
 }

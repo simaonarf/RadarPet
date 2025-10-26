@@ -16,13 +16,13 @@ class AuthController extends Controller
         $this->render('auth/login', compact('title'));
     }
 
-  public function authenticate(Request $request): void
+    public function authenticate(Request $request): void
     {
         $params = $request->getParam('user');
 
         if (!$params || !isset($params['email']) || !isset($params['password'])) {
             FlashMessage::danger('Ocorreu um erro. Tente novamente.');
-            $this->redirectTo(route('login')); 
+            $this->redirectTo(route('login'));
             return;
         }
 
@@ -33,13 +33,13 @@ class AuthController extends Controller
             FlashMessage::success('Login realizado com sucesso!');
 
             if ($user->isAdmin()) {
-                $this->redirectTo(route('admin.dashboard')); 
+                $this->redirectTo(route('admin.dashboard'));
             } else {
-                $this->redirectTo(route('home.index')); 
+                $this->redirectTo(route('home.index'));
             }
         } else {
             FlashMessage::danger('Email e/ou senha inválidos!');
-            $this->redirectTo(route('login')); 
+            $this->redirectTo(route('login'));
         }
     }
 
