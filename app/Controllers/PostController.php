@@ -77,7 +77,7 @@ class PostController extends Controller
         } else {
             FlashMessage::danger('Existem dados incorretos! Por verifique!');
             $title = "Editar Problema #{$post->id}";
-            $this->render('post/edit', compact('post', 'title'));
+            $this->render('posts/edit', compact('post', 'title'));
         }
     }
 
