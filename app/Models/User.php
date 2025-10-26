@@ -83,10 +83,14 @@ class User extends Model
 
         if (
             $property === 'password' &&
-            $this->newRecord() &&
             $value !== null && $value !== ''
         ) {
-            $this->encrypted_password = password_hash($value, PASSWORD_DEFAULT);
+
+            $this->password = $value;
+
+            if ($this->newRecord()) {
+                $this->encrypted_password = password_hash($value, PASSWORD_DEFAULT);
+            }
         }
     }
 }
