@@ -248,7 +248,7 @@ class PetsControllerTest extends ControllerTestCase
         $this->assertMatchesRegularExpression($regexDesc, $response);
 
 
-        $$regexUrl =
+        $regexUrl =
             '/<input\s[^>]*type=[\'"]text[\'"][^>]*name=[\'"]post\[url_photo\][\'"][^>]*value=[\'"]'
             . '\/uploads\/original\.jpg[\'"][^>]*>/i';
         $this->assertMatchesRegularExpression($regexUrl, $response);
