@@ -4,10 +4,11 @@ namespace App\Controllers;
 
 use App\Models\Post;
 use Core\Http\Controllers\Controller;
+use Core\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(): void
+    public function index(Request $request): void
     {
         $posts = Post::all();
 

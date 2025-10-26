@@ -16,6 +16,17 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login.auth
 Route::middleware('auth')->group(function () {
     // Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
+    
+    //create
+    Route::get('/posts/new', [PostController::class, 'new'])->name('posts.new');
+    Route::post('/posts', [PostController::class, 'create'])->name('posts.create');
+
+    //edit
+    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
+
+    //deleete
+    Route::delete('/', [PostController::class, 'destroy'])->name('posts.destroy');
 
     //create
     Route::get('/posts/new', [PostController::class, 'new'])->name('posts.new');
@@ -34,3 +45,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     });
 });
+
+Route::get('/{page}', [HomeController::class, 'index'])->name('posts.paginate');
