@@ -4,16 +4,15 @@ namespace Tests\Unit\Models;
 
 use App\Models\Post;
 use App\Models\User;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class PostCrudTest extends TestCase
 {
     private User $user;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
-
         $this->user = new User([
             'name' => 'Tester',
             'email' => 'tester@example.com',
@@ -35,8 +34,7 @@ class PostCrudTest extends TestCase
         ]);
         $this->assertTrue($post->save());
 
-        $found = Post::findBy(['id' => $post->id])[0] ?? null;
-
+        $found = Post::findById($post->id);
         $this->assertNotNull($found);
         $this->assertSame('Criar e ler', $found->title);
         $this->assertSame('Desc A', $found->description);
@@ -59,8 +57,7 @@ class PostCrudTest extends TestCase
         $post->url_photo = '/uploads/novo.jpg';
         $this->assertTrue($post->save());
 
-        $found = Post::findBy(['id' => $post->id])[0] ?? null;
-
+        $found = Post::findById($post->id);
         $this->assertNotNull($found);
         $this->assertSame('Atualizado', $found->title);
         $this->assertSame('Desc Atualizada', $found->description);
@@ -76,11 +73,11 @@ class PostCrudTest extends TestCase
             'user_id' => $this->user->id,
         ]);
         $post->save();
-        $id = $post->id;
 
+        $id = $post->id;
         $this->assertTrue($post->destroy());
 
-        $found = \App\Models\Post::findById($id);
+        $found = Post::findById($id);
         $this->assertNull($found);
     }
 }

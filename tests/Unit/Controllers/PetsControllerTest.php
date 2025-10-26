@@ -239,13 +239,18 @@ class PetsControllerTest extends ControllerTestCase
 
         $this->assertDoesNotMatchRegularExpression('/Location:/', $response);
 
-        $regexTitle = '/<input\s[^>]*type=[\'"]text[\'"][^>]*name=[\'"]post\[title\][\'"][^>]*value=[\'"]Título original[\'"][^>]*>/i';
+        $regexTitle =
+            '/<input\s[^>]*type=[\'"]text[\'"][^>]*name=[\'"]post\[title\][\'"][^>]*value=[\'"]Título original[\'"][^>]*>/i';
         $this->assertMatchesRegularExpression($regexTitle, $response);
 
-        $regexDesc = '/<textarea[^>]*name=[\'"]post\[description\][\'"][^>]*>.*Desc original.*<\/textarea>/is';
+        $regexDesc =
+            '/<textarea[^>]*name=[\'"]post\[description\][\'"][^>]*>.*Desc original.*<\/textarea>/is';
         $this->assertMatchesRegularExpression($regexDesc, $response);
 
-        $regexUrl = '/<input\s[^>]*type=[\'"]text[\'"][^>]*name=[\'"]post\[url_photo\][\'"][^>]*value=[\'"]\/uploads\/original\.jpg[\'"][^>]*>/i';
+
+        $$regexUrl =
+            '/<input\s[^>]*type=[\'"]text[\'"][^>]*name=[\'"]post\[url_photo\][\'"][^>]*value=[\'"]'
+            . '\/uploads\/original\.jpg[\'"][^>]*>/i';
         $this->assertMatchesRegularExpression($regexUrl, $response);
     }
 
@@ -258,6 +263,26 @@ class PetsControllerTest extends ControllerTestCase
         );
 
         $this->assertMatchesRegularExpression('/^Location:\s*\/$/m', $response);
+
         $this->assertSame('Post não encontrado', $_SESSION['flash']['danger'] ?? null);
+    }
+
+    public function test_home_shows_all_posts(): void
+    {
+        for ($i = 1; $i <= 11; $i++) {
+            (new Post([
+                'title'       => "Post $i",
+                'description' => "Desc $i",
+                'url_photo'   => "/uploads/p$i.jpg",
+                'user_id'     => $this->user->id,
+            ]))->save();
+        }
+
+        $response = $this->get(
+            action: 'index',
+            controllerName: 'App\Controllers\HomeController'
+        );
+
+        $this->assertMatchesRegularExpression('/Post 11\b/', $response);
     }
 }

@@ -16,7 +16,7 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login.auth
 Route::middleware('auth')->group(function () {
     // Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
-    
+
     //create
     Route::get('/posts/new', [PostController::class, 'new'])->name('posts.new');
     Route::post('/posts', [PostController::class, 'create'])->name('posts.create');
