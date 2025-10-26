@@ -5,7 +5,6 @@ namespace Tests\Unit\Models;
 use App\Models\User;
 use Tests\TestCase;
 
-
 class UserTest extends TestCase
 {
     public function test_authenticate_returns_true_for_correct_password(): void
