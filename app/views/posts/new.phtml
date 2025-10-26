@@ -40,10 +40,20 @@
         <textarea 
           id="description"
           name="post[description]" 
-          rows="4"
-          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+          rows="4"          
           required
-        ></textarea>
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:outline-none
+           <?= $post->errors('description') 
+                ? 'border-red-500 focus:ring-red-500 bg-red-50' 
+                : 'border-gray-300 focus:ring-blue-500' ?>"
+  ><?= htmlspecialchars($post->description ?? '') ?></textarea>
+
+        <?php if ($post->errors('description')): ?>
+        <p class="mt-2 text-sm text-red-600">
+          <?= $post->errors('description') ?>
+        </p>
+      <?php endif; ?>
+      </div>
       </div>
 
       <!-- Imagem URL -->
@@ -52,10 +62,21 @@
         <input 
           type="text" 
           id="url_photo"
-          name="post[url_photo]" 
-          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+          name="post[url_photo]"           
           required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:outline-none
+            <?= $post->errors('url_photo') 
+                ? 'border-red-500 focus:ring-red-500 bg-red-50' 
+                : 'border-gray-300 focus:ring-blue-500' ?>" 
+
+          value="<?= htmlspecialchars($post->url_photo ?? '')?>"
         >
+
+      <?php if ($post->errors('url_photo')): ?>
+        <p class="mt-2 text-sm text-red-600">
+          <?= $post->errors('url_photo') ?>
+        </p>
+      <?php endif; ?>
       </div>
 
       <!-- Botões -->

@@ -22,6 +22,8 @@ class PostController extends Controller
 
     public function create(Request $request): void
     {
+        $title = 'Create';
+
         $params = $request->getParam('post');
 
         $post = new Post();
@@ -39,7 +41,7 @@ class PostController extends Controller
             $this->redirectTo(route('posts.new'));
         } else {
             FlashMessage::danger('Ocorreu um erro ao criar o post. Verifique os dados.');  
-            $this->redirectTo(route('posts.new', compact('post')));
+            $this->render('posts/new', compact('post', 'title'));
         }
     }
 
@@ -70,13 +72,15 @@ class PostController extends Controller
         $post->description = $params['description'];
         $post->url_photo = $params['url_photo'];
 
+        $post->validates();
+
         if ($post->save()) {
             FlashMessage::success('Post atualizado com sucesso!');
             $this->redirectTo(route('home.index'));
         } else {
             FlashMessage::danger('Existem dados incorretos! Por verifique!');
-            $title = "Editar Problema #{$post->id}";
-            $this->render('post/edit', compact('post', 'title'));
+            $title = "Editar Post #{$post->id}";
+            $this->render('posts/edit', compact('post', 'title'));
         }
     }
 
