@@ -23,6 +23,7 @@ class User extends Model
     protected static array $columns = ['name', 'email', 'encrypted_password', 'type', 'role', 'register_date'];
 
     protected ?string $password = null;
+    public ?string $password_confirmation = null;
 
     public function posts(): HasMany
     {
@@ -40,6 +41,14 @@ class User extends Model
 
         if ($this->newRecord()) {
             Validations::notEmpty('password', $this);
+        }
+
+        $pwd = $this->password ?? null;
+        if ($this->newRecord() || ($pwd !== null && $pwd !== '')) {
+            $conf = $this->password_confirmation ?? null;
+            if (!is_string($conf) || $conf === '' || $conf !== $pwd) {
+                $this->addError('password_confirmation', 'as senhas devem ser idênticas!');
+            }
         }
     }
 
