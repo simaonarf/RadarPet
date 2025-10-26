@@ -2,8 +2,8 @@ name: Continous Integration
 
 on:
   push:
-  # pull_request:
-  #   types: [opened, synchronize, reopened]
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   tests:
@@ -85,4 +85,4 @@ jobs:
         run: ./run phpcs
 
       - name: PHPStan
-        run: ./run phpstan
+        run: vendor/bin/phpstan -n --memory-limit=1G
