@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Post;
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
+use Core\Database\ActiveRecord\HasMany;
 
 /**
  *
@@ -21,21 +23,32 @@ class User extends Model
     protected static array $columns = ['name', 'email', 'encrypted_password', 'type', 'role', 'register_date'];
 
     protected ?string $password = null;
-/*     protected ?string $password_confirmation = null; */
+    public ?string $password_confirmation = null;
 
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
 
     public function validates(): void
     {
         Validations::notEmpty('name', $this);
         Validations::notEmpty('email', $this);
 
-        Validations::notEmpty('role', $this); 
+        Validations::notEmpty('role', $this);
 
         Validations::uniqueness('email', $this);
 
         if ($this->newRecord()) {
             Validations::notEmpty('password', $this);
-/*             Validations::passwordConfirmation($this); */
+        }
+
+        $pwd = $this->password ?? null;
+        if ($this->newRecord() || ($pwd !== null && $pwd !== '')) {
+            $conf = $this->password_confirmation ?? null;
+            if (!is_string($conf) || $conf === '' || $conf !== $pwd) {
+                $this->addError('password_confirmation', 'as senhas devem ser idênticas!');
+            }
         }
     }
 
@@ -58,7 +71,7 @@ class User extends Model
     {
         return $this->role === 'admin';
     }
-    
+
     public function isUser(): bool
     {
         return $this->role === 'user';
@@ -77,4 +90,3 @@ class User extends Model
         }
     }
 }
-

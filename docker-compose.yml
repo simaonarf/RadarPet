@@ -10,6 +10,8 @@ services:
       - "8080:8080"
     networks:
       - app-network
+    depends_on:
+      - php
 
   php:
     image: php:8.3.4-fpm
@@ -66,15 +68,6 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: root
       DB_PASSWORD: ""
-
-  tailwind-builder:
-    image: node:lts-alpine
-    container_name: tailwind_builder_RP
-    user: "${UID}:${GID}"
-    working_dir: /app
-    volumes:
-      - ./:/app
-    command: tail -f /dev/null
 
 networks:
   app-network:

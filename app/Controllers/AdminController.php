@@ -8,19 +8,8 @@ use Lib\Authentication\Auth;
 
 class AdminController extends Controller
 {
-
-    private function requireAdminLogin(): void
-    {
-        $user = Auth::user();
-        if (!$user || !$user->isAdmin()) {
-            $this->redirectTo(route('login'));
-            exit;
-        }
-    }
-
     public function index(): void
     {
-        $this->requireAdminLogin();
 
         $title = 'Painel Administrativo';
 
