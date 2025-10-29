@@ -22,7 +22,7 @@ class UsersPopulate
 
         echo "Criando Usuário Comum...\n";
         $user = new User();
-        $user->name = 'Usuario Comum';
+        $user->name = 'Usuário Comum';
         $user->email = 'user@demo.com';
         $user->password = 'user123';
         $user->role = 'user';

@@ -9,15 +9,23 @@
 
 </head>
 
+<body>
+
 <body class="bg-gray-100 text-black">
-<a href="<?= route('home.index') ?>"><h1 class="text-3xl font-bold text-blue-600 p-10">
+<h1 class="text-3xl font-bold text-blue-600 p-10">
     RadarPet
-</h1></a>
+</h1>
 
     <main class="container-fluid">
 
 
         <?php require '_flash_message.phtml'; ?>
+
+<!--         <header class="mb-3">
+            <h1>
+              <?= $title ?> 
+            </h1>
+        </header> -->
 
         <?php require $view ?>
 
