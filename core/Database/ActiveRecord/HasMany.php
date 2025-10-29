@@ -41,7 +41,7 @@ class HasMany
         );
     }
 
-    public function paginate(int $page = 1, int $per_page = 12, string $route = null): Paginator
+    public function paginate(int $page = 1, int $per_page = 10, string $route = null): Paginator
     {
         return new Paginator(
             class: $this->related,
