@@ -31,5 +31,17 @@ class UsersPopulate
         echo "user@demo.com' criado com sucesso!\n";
 
         $user->save();
+
+        echo "Criando Usuário Comum #2...\n";
+        $user = new User();
+        $user->name = 'Usuario Comum 2';
+        $user->email = 'user2@demo.com';
+        $user->password = 'user123';
+        $user->role = 'user';
+        $user->type = 'encontrador';
+
+        echo "user2@demo.com' criado com sucesso!\n";
+
+        $user->save();
     }
 }

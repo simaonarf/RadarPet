@@ -1,21 +1,22 @@
-<div class="grid grid-cols-3 gap-5 m-10 mb-50">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 m-10 mb-50 ">
             <?php foreach ($posts as $post): ?>
                 <div class="bg-white p-5 rounded-md shadow-lg w-full max-w-sm mx-auto">
-                    <img src="<?= htmlspecialchars($post->url_photo) ?>" alt="<?= htmlspecialchars($post->title) ?>" class="rounded-md w-full h-48 object-cover">
+                    <a href="<?= route('posts.show', ['id' => $post->id]) ?>">
+                        <img src="<?= htmlspecialchars($post->url_photo) ?>" alt="<?= htmlspecialchars($post->title) ?>" class="rounded-md w-full h-48 object-cover">
+                    </a>
                     <h3 class="font-bold text-xl pb-2 pt-4"><?= htmlspecialchars($post->title) ?></h3>
                     <p class="text-gray-600"><?= htmlspecialchars($post->description) ?></p>
                     
                     <!-- Container para os botões -->
-                    <div class="flex space-x-4 mt-4">
+                    <div class="flex space-x-4 mt-4">                          
                         <!-- Formulário de delete -->
                         <form action="<?= route('posts.destroy', ['id' => $post->id]) ?>" method="POST" class="m-0">
                             <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition">Delete</button>
+                            <button type="submit" class="bg-red-200 text-red-700 px-5 py-2 rounded-lg hover:bg-red-700 hover:text-red-200 transition">Delete</button>
                         </form>
-                        
                         <!-- Link de edit -->
                         <a href="<?= route('posts.edit', ['id' => $post->id]) ?>">
-                            <button type="button" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">Edit</button>
+                            <button type="button" class="bg-blue-200 text-blue-700 px-5 py-2 rounded-lg hover:bg-blue-700 hover:text-blue-200 transition">Edit</button>
                         </a>
                     </div>
                 </div>
@@ -26,4 +27,6 @@
 
 <a href="<?= route('posts.new') ?>" class="block text-center text-sm text-green-600 underline mb-6">Adicionar</a>
 
-<a href="<?= route('logout') ?>" class="block text-center text-sm text-blue-600 underline">Sair</a>
+
+<?php $paginator->renderPagesNavigation(); ?>
+

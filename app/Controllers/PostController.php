@@ -43,6 +43,23 @@ class PostController extends Controller
         }
     }
 
+    public function show(Request $request): void
+    {
+        $params = $request->getParams();
+        $post = $this->current_user->posts()->findById($params['id']);
+
+        if (!$post instanceof Post) {
+            FlashMessage::danger('Post não encontrado');
+            $this->redirectTo('/');
+            return;
+        }
+
+        $title = "Post #{$post->id}";
+        $username = $this->current_user->name;
+
+        $this->render('posts/show', compact('post', 'title', 'username'));
+    }
+
     public function edit(Request $request): void
     {
         $params = $request->getParams();
