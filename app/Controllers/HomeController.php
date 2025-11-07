@@ -28,7 +28,6 @@ class HomeController extends Controller
             $this->renderJson('home/index', compact('paginator', 'posts', 'title'));
         } else {
             $this->render('home/index', compact('paginator', 'title', 'posts'));
-
         }
     }
 
