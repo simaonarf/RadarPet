@@ -19,10 +19,20 @@ CREATE TABLE IF NOT EXISTS posts (
   user_id INT NOT NULL,
   title VARCHAR(100) NOT NULL,
   description TEXT NOT NULL,
-  url_photo VARCHAR(255) NOT NULL,
   register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-SET foreign_key_checks = 1;
+DROP TABLE IF EXISTS post_photos;
+
+CREATE TABLE IF NOT EXISTS post_photos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  post_id INT NOT NULL,
+  path VARCHAR(255) NOT NULL,
+  register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+
+SET foreign_key_checks = 1;   
