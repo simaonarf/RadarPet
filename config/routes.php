@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
 
+    //delete individual photo
+    Route::delete('/posts/{id}/show/{photo_id}', [PostController::class, 'destroyPhoto'])->name('posts.photos.destroy');
+
     //deleete
     Route::delete('/', [PostController::class, 'destroy'])->name('posts.destroy');
 
