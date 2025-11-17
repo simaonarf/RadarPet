@@ -1,63 +1,32 @@
-<?php
-
-$baseLinkClasses = "inline-flex items-center px-3 py-2 rounded-md border text-sm font-medium";
-$defaultStateClasses = "border-gray-300 bg-white text-gray-700 hover:bg-gray-50";
-$activeStateClasses = "border-blue-600 bg-blue-600 text-white cursor-default";
-$disabledStateClasses = "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed";
-?>
-
 <nav aria-label="Page navigation">
-    <ul class="flex justify-center space-x-1 m-15">
+    <ul class="pagination justify-content-end">
 
         <?php if ($paginator->hasPreviousPage()) : ?>
-            <li>
-                <a class="<?= $baseLinkClasses ?> <?= $defaultStateClasses ?>" 
-                   href="<?= route($paginator->getRouteName(), ['page' => $paginator->previousPage()]) ?>">
-                    Anterior
-                </a>
+            <li class="page-item">
+                <a class="page-link" href="<?= route($paginator->getRouteName(), ['page' => $paginator->previousPage()]) ?>">Anterior</a>
             </li>
         <?php else : ?>
-            <li>
-                <a class="<?= $baseLinkClasses ?> <?= $disabledStateClasses ?>">
-                    Anterior
-                </a>
+            <li class="page-item disabled">
+                <a class="page-link">Anterior</a>
             </li>
         <?php endif; ?>
 
         <?php for ($page = 1; $page <= $paginator->totalOfPages(); $page++) : ?>
-            <?php
-                $isCurrentPage = $paginator->isPage($page);
-                
-                $linkClasses = $baseLinkClasses . " " . ($isCurrentPage ? $activeStateClasses : $defaultStateClasses);
-            ?>
-            <li>
-                <a class="<?= $linkClasses ?>" 
-                   <?php if (!$isCurrentPage) : ?>
-                       href="<?= route($paginator->getRouteName(), ['page' => $page]) ?>"
-                   <?php endif; ?>
-                >
-                    <?= $page ?>
-                </a>
+            <li class="page-item <?= $paginator->isPage($page) ? 'active' : '' ?>">
+                <a class="page-link" href="<?= route($paginator->getRouteName(), ['page' => $page]) ?>"><?= $page ?></a>
             </li>
         <?php endfor; ?>
 
         <?php if ($paginator->hasNextPage()) : ?>
-            <li>
-                <a class="<?= $baseLinkClasses ?> <?= $defaultStateClasses ?>" 
-                   href="<?= route($paginator->getRouteName(), ['page' => $paginator->nextPage()]) ?>">
-                    Próxima
-                </a>
+            <li class="page-item">
+                <a class="page-link" href="<?= route($paginator->getRouteName(), ['page' => $paginator->nextPage()]) ?>">Próxima</a>
             </li>
         <?php else : ?>
-            <li>
-                <a class="<?= $baseLinkClasses ?> <?= $disabledStateClasses ?>">
-                    Próxima
-                </a>
+            <li class="page-item disabled">
+                <a class="page-link">Próxima</a>
             </li>
         <?php endif; ?>
     </ul>
 </nav>
 
-<div class="flex justify-end mr-10 mt-2 text-sm text-gray-600">
-    <?= $paginator->entriesInfo() ?>
-</div>
+<div class="d-flex justify-content-end"><?= $paginator->entriesInfo() ?></div>

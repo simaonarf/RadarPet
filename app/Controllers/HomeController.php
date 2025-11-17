@@ -2,24 +2,19 @@
 
 namespace App\Controllers;
 
-use App\Models\Post;
 use Core\Http\Controllers\Controller;
-use Core\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): void
+    public function index(): void
     {
-        $posts = Post::all();
+        if (empty($_SESSION['user'])) {
+            header('Location: /login');
+            exit;
+        }
 
         $title = 'Home Page';
-        $this->render('home/index', compact('title', 'posts'));
-    }
-
-    public function admin(): void
-    {
-        $title = 'Área Admin';
-        $this->render('admin/index', compact('title'));
+        $this->render('home/index', compact('title'));
     }
 
     public function admin(): void
