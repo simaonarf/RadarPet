@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Post;
+use App\Models\PostUserOccurrences;
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
 use Core\Database\ActiveRecord\HasMany;
@@ -75,6 +76,11 @@ class User extends Model
     public function isUser(): bool
     {
         return $this->role === 'user';
+    }
+
+    public function occurrences(): HasMany
+    {
+    return $this->hasMany(PostUserOccurrence::class, 'user_id');
     }
 
     public function __set(string $property, mixed $value): void
