@@ -5,9 +5,12 @@ use App\Controllers\HomeController;
 use App\Controllers\AuthController;
 use App\Controllers\AdminController;
 use App\Controllers\PostController;
+use App\Controllers\PostOccurrencesController;
 
 // ROTAS PÚBLICAS
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+Route::get('/posts/index', [PostController::class, 'index'])->name('posts.index');
 
 // ROTAS DE AUTENTICACAO
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -42,8 +45,12 @@ Route::middleware('auth')->group(function () {
     //delete individual photo
     Route::delete('/posts/{id}/show/{photo_id}', [PostController::class, 'destroyPhoto'])->name('posts.photos.destroy');
 
-    //deleete
+    //delete post
     Route::delete('/', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    // Occurrences
+    Route::post('/posts/{id}/occurrences', [PostOccurrencesController::class, 'create'])->name('occurrences.create');
+    Route::delete('/posts/{post_id}/occurrences/{occurrence_id}', [PostOccurrencesController::class, 'destroy'])->name('occurrences.destroy');
 
 
     Route::middleware('admin')->group(function () {
