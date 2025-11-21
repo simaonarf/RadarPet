@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Post;
 use App\Models\PostPhoto;
+use App\Models\PostUserOccurrence;
 use Core\Http\Controllers\Controller;
 use Core\Http\Request;
 use Core\Router\Route;
@@ -13,6 +14,31 @@ use App\services\GalleryService;
 
 class PostController extends Controller
 {
+
+    public function index(Request $request): void
+    {
+        if (!$this->current_user) {
+            $this->render('auth/login');
+            return;
+        }
+
+        $pageParam = $request->getParam('page', 1);
+        $page = is_numeric($pageParam) ? (int)$pageParam : 1;
+
+        $paginator = $this->current_user->posts()->paginate($page);
+
+        $posts = $paginator->registers();
+
+        $title = 'Meus Posts';
+
+        if ($request->acceptJson()) {
+            $this->renderJson('posts/index', compact('paginator', 'posts', 'title'));
+        } else {
+            $this->render('posts/index', compact('paginator', 'title', 'posts'));
+        }
+    }
+
+
     public function new(Request $request): void
     {
         $post = new Post();
@@ -28,8 +54,7 @@ class PostController extends Controller
         $files = $_FILES['photos'] ?? [];
 
         $galleryService = new GalleryService();
-        $filesNormalized = $galleryService->normalizeFilesArray($files);
-        $post = $galleryService->createPostWithPhotos($params, $filesNormalized, Auth::user());
+        $post = $galleryService->createPostWithPhotos($params, $files, $this->current_user);
 
         if ($post->hasErrors()) {
             FlashMessage::danger('Ocorreu um erro ao criar o post.');
@@ -44,7 +69,7 @@ class PostController extends Controller
     public function show(Request $request): void
     {
         $params = $request->getParams();
-        $post = $this->current_user->posts()->findById($params['id']);
+        $post = Post::findById($params['id']);
 
         if (!$post instanceof Post) {
             FlashMessage::danger('Post não encontrado');
@@ -52,10 +77,17 @@ class PostController extends Controller
             return;
         }
 
-        $title = "Post #{$post->id}";
-        $username = $this->current_user->name;
+        $occurrence = PostUserOccurrence::findBy([
+        'user_id' => $this->current_user->id,
+        'post_id' => $post->id,
+        ]);
 
-        $this->render('posts/show', compact('post', 'title', 'username'));
+        $occurrences = $post->occurrences()->get();
+
+        $title = "Post #{$post->id}";
+        $username =  $post->user();
+
+        $this->render('posts/show', compact('post', 'title', 'username', 'occurrence', 'occurrences'));
     }
 
     public function edit(Request $request): void
@@ -81,7 +113,6 @@ class PostController extends Controller
         $files = $_FILES['photos'] ?? [];
 
         $post = $this->current_user->posts()->findById($id);
-        /** @var Post|null $post */
 
         if (!$post instanceof Post) {
             FlashMessage::danger('Post não encontrado');
@@ -116,7 +147,6 @@ class PostController extends Controller
         $photoId = (int) $request->getParam('photo_id');
         $postId = (int) $request->getParam('id');
 
-        /** @var Post|null $post */
         $post = $this->current_user->posts()->findById($postId);
 
         if (!$post) {
@@ -141,7 +171,6 @@ class PostController extends Controller
     {
         $id = $request->getParam('id');
 
-        /** @var \App\Models\Post|null $post */
         $post = $this->current_user->posts()->findById($id);
 
         if (!$post) {

@@ -15,10 +15,7 @@ class HomeController extends Controller
             return;
         }
 
-        $pageParam = $request->getParam('page', 1);
-        $page = is_numeric($pageParam) ? (int)$pageParam : 1;
-
-        $paginator = $this->current_user->posts()->paginate($page);
+        $paginator = Post::paginate(page: $request->getParam('page', 1));
 
         $posts = $paginator->registers();
 
