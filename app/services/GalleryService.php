@@ -10,7 +10,7 @@ use Lib\Validations;
 class GalleryService
 {
     private const UPLOAD_DIR = '/assets/uploads/';
-    private const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    private const MAX_SIZE = 5 * 1024 * 1024;
     private const ALLOWED_MIMES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     private const MAX_PHOTOS = 10;
 
@@ -24,11 +24,13 @@ class GalleryService
 
         $post->validates();
 
-        if ($post->hasErrors() || !$this->validateFiles($files, $post) || !$post->save()) {
+        $normalizedFiles = $this->normalizeFilesArray($files);
+
+        if ($post->hasErrors() || !$this->validateFiles($normalizedFiles, $post) || !$post->save()) {
             return $post;
         }
 
-        if (!$this->processPhotos($files, $post)) {
+        if (!$this->processPhotos($normalizedFiles, $post)) {
             $this->rollback($post, []);
         }
 
@@ -80,7 +82,45 @@ class GalleryService
         return true;
     }
 
-    public function normalizeFilesArray(array $files): array
+    private function processPhotos(array $files, Post $post, bool $rollbackPost = true): bool
+    {
+        $uploadedPhotos = [];
+
+        foreach ($files as $index => $file) {
+            $photoPath = $this->uploadPhoto($file, $post->id);
+
+            if (!$photoPath || !$this->savePhoto($photoPath, $post->id)) {
+                if ($rollbackPost) {
+                    $this->rollback($post, $uploadedPhotos);
+                } else {
+                    $this->deleteUploadedPhotos($uploadedPhotos);
+                }
+                $post->addError('photos', 'erro ao processar foto ' . ($index + 1));
+                return false;
+            }
+
+            $uploadedPhotos[] = $photoPath;
+        }
+
+        return true;
+    }
+
+    private function validateFiles(array $files, Post $post): bool
+    {
+        if (!Validations::filesNotEmpty($files, $post, self::MAX_PHOTOS)) {
+            return false;
+        }
+
+        foreach ($files as $index => $file) {
+            if (!Validations::fileValid($file, $post, $index + 1, self::MAX_SIZE, self::ALLOWED_MIMES)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function normalizeFilesArray(array $files): array
     {
         if (empty($files['name']) || !is_array($files['name'])) {
             return empty($files['name']) ? [] : [$files];
@@ -106,39 +146,16 @@ class GalleryService
         return $normalized;
     }
 
-    private function validateFiles(array $files, Post $post): bool
+    private function savePhoto(string $path, int $postId): bool
     {
-        if (!Validations::filesNotEmpty($files, $post, self::MAX_PHOTOS)) {
+        $postPhoto = new PostPhoto([
+            'post_id' => $postId,
+            'path' => $path
+        ]);
+
+        if (!$postPhoto->save()) {
+            $this->deletePhysicalFile($path);
             return false;
-        }
-
-        foreach ($files as $index => $file) {
-            if (!Validations::fileValid($file, $post, $index + 1, self::MAX_SIZE, self::ALLOWED_MIMES)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function processPhotos(array $files, Post $post, bool $rollbackPost = true): bool
-    {
-        $uploadedPhotos = [];
-
-        foreach ($files as $index => $file) {
-            $photoPath = $this->uploadPhoto($file, $post->id);
-
-            if (!$photoPath || !$this->savePhoto($photoPath, $post->id)) {
-                if ($rollbackPost) {
-                    $this->rollback($post, $uploadedPhotos);
-                } else {
-                    $this->deleteUploadedPhotos($uploadedPhotos);
-                }
-                $post->addError('photos', 'erro ao processar foto ' . ($index + 1));
-                return false;
-            }
-
-            $uploadedPhotos[] = $photoPath;
         }
 
         return true;
@@ -165,21 +182,6 @@ class GalleryService
         return $relativePath;
     }
 
-    private function savePhoto(string $path, int $postId): bool
-    {
-        $postPhoto = new PostPhoto([
-            'post_id' => $postId,
-            'path' => $path
-        ]);
-
-        if (!$postPhoto->save()) {
-            $this->deletePhysicalFile($path);
-            return false;
-        }
-
-        return true;
-    }
-
     private function rollback(Post $post, array $uploadedPhotos): void
     {
         $this->deleteUploadedPhotos($uploadedPhotos);
@@ -200,7 +202,7 @@ class GalleryService
             @unlink($absolutePath);
         }
     }
-    
+
     private function getAbsolutePath(string $relativePath): string
     {
         return __DIR__ . '/../../public' . $relativePath;

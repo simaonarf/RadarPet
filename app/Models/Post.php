@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
-use Core\Database\ActiveRecord\HasMany; 
+use Core\Database\ActiveRecord\BelongsTo;
+use Core\Database\ActiveRecord\BelongsToMany;
+use Core\Database\ActiveRecord\HasMany;
 
 /**
  *
@@ -18,7 +20,7 @@ use Core\Database\ActiveRecord\HasMany;
 class Post extends Model
 {
     protected static string $table = 'posts';
-    protected static array $columns = ['user_id', 'title', 'description','register_date'];
+    protected static array $columns = ['user_id', 'title', 'description', 'register_date'];
 
     public function validates(): void
     {
@@ -29,7 +31,7 @@ class Post extends Model
 
     public function user(): ?User
     {
-        return User::findBy(['id' => $this->user_id])[0] ?? null;
+        return User::findBy(['id' => $this->user_id]);
     }
 
      public function photos(): HasMany
@@ -48,6 +50,21 @@ class Post extends Model
         usort($photos, fn($a, $b) => $a->id <=> $b->id);
 
         return $photos[0]->path;
+    }
+
+    public function occurrences(): HasMany
+    {
+        return $this->hasMany(PostUserOccurrence::class, 'post_id');
+    }
+
+    public function seenByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'occurrences', 'post_id', 'user_id');
+    }
+
+    public function wasSeenBy(User $user): bool
+    {
+        return PostUserOccurrences::exists(['post_id' => $this->id, 'user_id' => $user->id]);
     }
 
     public function addError(string $attribute, string $message): void

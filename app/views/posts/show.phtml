@@ -83,10 +83,111 @@ $isOwner = Lib\Authentication\Auth::check() && Lib\Authentication\Auth::user()->
             <?php if ($username): ?>
                 <div class="flex items-center text-gray-600 mb-4">
                     <span class="mr-4 px-3 py-1 bg-gray-100 text-gray-800 rounded-full font-mono text-xs">
-                        <span class="font-bold">Publicado por:</span> <?= $username  ?>
+                        <span class="font-bold">Publicado por:</span> <?= htmlspecialchars($username->name) ?>
                     </span>
                 </div>
             <?php endif; ?>
+
+        <div class="my-6 p-4 bg-gray-100 rounded-xl">
+
+            <?php if (!empty($occurrences)): ?>                
+                <h1 class="text-md md:text-xl font-bold text-gray-900 mb-4">Ocorrências registradas</h1>
+
+                <?php foreach ($occurrences as $oc): ?>
+                    <div class="p-3 bg-white border rounded-lg shadow-sm mb-3">
+                        <p class="text-gray-800">
+                            <strong>Local:</strong> <?= htmlspecialchars($oc->location) ?>
+                        </p>
+                        <?php if ($oc->description !== null && trim($oc->description) !== ''): ?>
+                            <p class="mt-1 text-gray-700">
+                                <strong>Descrição:</strong><br>
+                                <?= htmlspecialchars($oc->description) ?>
+                            </p>
+                        <?php endif; ?>
+                        <?php if ($oc->created_at !== null && trim($oc->created_at) !== ''): ?>
+                            <p class="mt-2 text-xs text-gray-500">
+                                <?= date('d/m/Y H:i', strtotime($oc->created_at)) ?>
+                            </p>
+                        <?php endif; ?>
+
+                        <?php if ($oc->user_id === $this->current_user->id): ?>
+                            <form action="<?= route('occurrences.destroy', ['id' => $oc->id]) ?>" 
+                                method="POST" class="mt-3">
+                                <input type="hidden" name="_method" value="DELETE">
+
+                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm">
+                                    Remover minha ocorrência
+                                </button>
+                            </form>
+                        <?php endif; ?>
+
+                    </div>
+                <?php endforeach; ?>
+
+            <?php else: ?>
+                <p class="text-gray-600 italic">Nenhuma ocorrência registrada para este post.</p>
+            <?php endif; ?>
+
+            <?php if (!$occurrence): ?>
+
+                <h1 class="text-md md:text-xl font-bold text-gray-900 mt-6 mb-4">Registrar Ocorrência</h1>
+
+                <form action="<?= route('occurrences.create') ?>" method="POST" class="space-y-3">
+                    <input type="hidden" name="post_id" value="<?= $post->id ?>">
+
+                    <div>
+                        <label class="font-semibold text-gray-700">Localização</label>
+                        <input type="text" name="location" required
+                            class="w-full mt-1 border rounded-lg p-2"
+                            placeholder="Ex: Rua Central, Bloco B">
+                    </div>
+
+                    <div>
+                        <label class="font-semibold text-gray-700">Descrição (opcional)</label>
+                        <textarea name="description"
+                            class="w-full mt-1 border rounded-lg p-2"
+                            placeholder="Informações adicionais"></textarea>
+                    </div>
+
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        Registrar Ocorrência
+                    </button>
+                </form>
+
+            <?php else: ?>
+
+                <h1 class="text-md md:text-xl font-bold text-gray-900 mt-6 mb-2">Minha Ocorrência</h1>
+
+                <div class="p-3 bg-white border rounded-lg shadow-sm mb-4">
+
+                    <p class="text-gray-800">
+                        <strong>Local:</strong> <?= htmlspecialchars($occurrence->location) ?>
+                    </p>
+
+                    <?php if (!empty($occurrence->description)): ?>
+                        <p class="mt-1 text-gray-700">
+                            <strong>Descrição:</strong><br>
+                            <?= nl2br(htmlspecialchars($occurrence->description)) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($occurrence->created_at)): ?>
+                        <p class="mt-2 text-xs text-gray-500">
+                            <?= date('d/m/Y H:i', strtotime($occurrence->created_at)) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <form action="<?= route('occurrences.destroy', ['id' => $occurrence->id]) ?>" 
+                        method="POST" class="mt-4">
+                        <input type="hidden" name="_method" value="DELETE">
+
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                            Remover Ocorrência
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        </div>
 
             <div class="mt-2 pt-6 border-t">
                 <a href="<?= route('home.index') ?>" 

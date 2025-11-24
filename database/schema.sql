@@ -35,4 +35,20 @@ CREATE TABLE IF NOT EXISTS post_photos (
   FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
-SET foreign_key_checks = 1;   
+DROP TABLE IF EXISTS post_user_occurrences;
+
+CREATE TABLE IF NOT EXISTS post_user_occurrences (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+
+    UNIQUE KEY unique_occurrence (user_id, post_id)
+);
+
+SET foreign_key_checks = 1;
