@@ -80,9 +80,9 @@ class Validations
 
     public static function filesNotEmpty(array $files, $obj, int $maxPhotos = 10): bool
     {
+        // Fotos opcionais -> se não mandar nenhuma, está OK
         if (empty($files)) {
-            $obj->addError('photos', 'nenhuma foto foi enviada.');
-            return false;
+            return true;
         }
 
         if (count($files) > $maxPhotos) {
@@ -117,7 +117,7 @@ class Validations
 
         return true;
     }
-    
+
     public static function photosLimit(int $currentCount, int $newCount, $obj, int $maxPhotos = 10): bool
     {
         if (($currentCount + $newCount) > $maxPhotos) {

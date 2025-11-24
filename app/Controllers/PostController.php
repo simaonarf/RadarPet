@@ -57,11 +57,12 @@ class PostController extends Controller
         $post = $galleryService->createPostWithPhotos($params, $files, $this->current_user);
 
         if ($post->hasErrors()) {
-            FlashMessage::danger('Ocorreu um erro ao criar o post.');
-            $this->render('posts/new', ['post' => $post]); 
+            FlashMessage::danger('Ocorreu um erro ao criar o post. Verifique os dados.');
+
+            $this->redirectTo(route('posts.new'));
             return;
         }
-        
+
         FlashMessage::success('Post Criado com sucesso!');
         $this->redirectTo(route('posts.new'));
     }
@@ -78,8 +79,8 @@ class PostController extends Controller
         }
 
         $occurrence = PostUserOccurrence::findBy([
-        'user_id' => $this->current_user->id,
-        'post_id' => $post->id,
+            'user_id' => $this->current_user->id,
+            'post_id' => $post->id,
         ]);
 
         $occurrences = $post->occurrences()->get();
@@ -129,7 +130,7 @@ class PostController extends Controller
             $this->render('posts/edit', compact('post', 'title'));
             return;
         }
-        
+
         $galleryService = new GalleryService();
         if (!$galleryService->addPhotos($post, $files)) {
             FlashMessage::danger('Post atualizado, mas ocorreu erro ao adicionar fotos.');
@@ -156,7 +157,7 @@ class PostController extends Controller
         }
 
         $galleryService = new GalleryService();
-        
+
         if ($galleryService->deletePhoto($photoId, $post)) {
             FlashMessage::success('Foto excluída com sucesso!');
         } else {
