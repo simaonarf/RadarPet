@@ -1,0 +1,55 @@
+SET foreign_key_checks = 0;
+
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(120) NOT NULL UNIQUE,
+  encrypted_password VARCHAR(255) NOT NULL,
+  type ENUM('tutor','encontrador') DEFAULT NULL,
+  role ENUM('admin','user') NOT NULL DEFAULT 'user',
+  register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS posts;
+
+CREATE TABLE IF NOT EXISTS posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  description TEXT NOT NULL,
+  url_photo VARCHAR(255) DEFAULT NULL,
+  register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+DROP TABLE IF EXISTS post_photos;
+
+CREATE TABLE IF NOT EXISTS post_photos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  post_id INT NOT NULL,
+  path VARCHAR(255) NOT NULL,
+  register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS post_user_occurrences;
+
+CREATE TABLE IF NOT EXISTS post_user_occurrences (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+
+    UNIQUE KEY unique_occurrence (user_id, post_id)
+);
+
+SET foreign_key_checks = 1;

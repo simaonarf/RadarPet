@@ -1,0 +1,91 @@
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarPet</title>
+    <link rel="stylesheet" href="/assets/css/application.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 text-black">
+    <nav class="flex justify-between items-center">  
+<!--         <img src="/assets/images/logoRadarPet.svg" alt="logo">
+ -->
+        <a href="<?= route('home.index') ?>"><h1 class=" text-2xl md:text-3xl font-bold text-blue-600 p-10">
+            RadarPet
+        </h1></a>
+    
+        <?php if ($this->current_user): ?>
+        <div class="relative mr-10 px-2 py-2 bg-white rounded-md shadow-sm">
+            <span id="user-menu-button" class="text-gray-800 cursor-pointer flex items-center gap-2">
+                <?= $this->current_user->email ?>
+
+                <svg id="arrow" class="w-4 h-4 text-gray-700 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+            </span>
+
+            <div id="user-menu" class="absolute right-0  mt-4 bg-white rounded-md shadow-sm transition-all duration-200 ease-out 
+           opacity-0 scale-95 pointer-events-none"> 
+                <a href="" class="block px-2 py-2 text-blue-600">Profile</a>
+                <hr>
+                <a href=<?= route('logout') ?> class="block px-2 py-2 text-red-600">Logout</a>
+            </div>
+        </div>
+
+        <?php else: ?>
+            <!-- nao exibir nada -->
+        <?php endif; ?>
+    </nav>
+
+
+    <main class="container-fluid">
+
+        <?php require '_flash_message.phtml'; ?>
+
+        <?php require $view ?>
+
+    </main>
+
+    <script>
+    /* menu suspenso */
+    const menuButton = document.getElementById('user-menu-button');
+    const userMenu = document.getElementById('user-menu');
+    const menuArrow = document.getElementById('arrow');
+
+    /* caixa de confirmação delete */
+    const openConfirmBox = document.getElementById('open-confirm-box');
+    const confirmBox = document.getElementById('confirm-box');
+    const closeBtn = document.getElementById('close-btn');
+
+
+    menuButton.addEventListener('click', function() {        
+        menuArrow.classList.toggle('rotate-180');
+
+        // "open"
+        userMenu.classList.toggle('opacity-100');
+        userMenu.classList.toggle('scale-100');
+        userMenu.classList.toggle('pointer-events-auto');
+        userMenu.classList.add('shadow-md');
+
+        
+        // "closed" 
+        userMenu.classList.toggle('opacity-0');
+        userMenu.classList.toggle('scale-95');
+        userMenu.classList.toggle('pointer-events-none');
+        }
+    );
+
+    openConfirmBox.addEventListener('click', function() {
+        confirmBox.classList.remove('hidden');
+    });
+
+    closeBtn.addEventListener('click', function() {
+        confirmBox.classList.add('hidden');
+    });
+</script>
+</body>
+
+</html>

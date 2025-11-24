@@ -1,0 +1,229 @@
+<?php
+$photos = $post->photos()->get();
+
+$galleryPhotos = array_slice($photos, 0, 3);
+
+$featuredPhoto = $galleryPhotos[0] ?? null;
+$sidePhotos = array_slice($galleryPhotos, 1);
+
+$hasSidePhotos = count($sidePhotos) > 0;
+$gridClass = $hasSidePhotos ? 'grid grid-cols-3 gap-2' : 'grid grid-cols-1';
+
+$isOwner = Lib\Authentication\Auth::check() && Lib\Authentication\Auth::user()->id === $post->user_id;
+?>
+
+
+<main class="container mx-auto p-4 md:p-8 flex flex-col lg:flex-row justify-center gap-8">
+        <div class="max-w-2xl w-full bg-white shadow-lg rounded-2xl overflow-hidden">
+            <div class="<?= $gridClass ?> h-[450px] w-full">
+                <div class="<?= $hasSidePhotos ? 'col-span-2' : 'col-span-1' ?> h-full relative group w-full">
+                    <?php if ($featuredPhoto): ?>
+                        <img src="<?= htmlspecialchars($featuredPhoto->path) ?>"
+                            class="absolute inset-0 object-cover w-full h-full rounded-lg block">
+                        <?php if ($isOwner): ?>
+                        <form action="<?= route('posts.photos.destroy', ['id' => $post->id, 'photo_id' => $featuredPhoto->id]) ?>" 
+                            method="POST"
+                            class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="p-1 bg-black bg-opacity-50 rounded-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="red" class="size-7">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </button>
+                        </form>
+                        <?php endif; ?>
+
+                    <?php else: ?>
+                        <img src="https://placehold.co/800x600/eee/ccc?text=Sem+Foto" 
+                            class="object-cover w-full h-full rounded-lg block">
+                    <?php endif; ?>
+                </div>
+
+                <?php if ($hasSidePhotos): ?>
+                <div class="flex flex-col gap-2 h-full">
+                    <?php foreach ($sidePhotos as $photo): ?>
+                        <div class="relative h-1/2 group">
+                            <img src="<?= htmlspecialchars($photo->path) ?>"
+                                class="object-cover w-full h-full rounded-lg">
+                            <?php if ($isOwner): ?>
+                            <form action="<?= route('posts.photos.destroy', ['id' => $post->id, 'photo_id' => $photo->id]) ?>" 
+                                method="POST"
+                                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="p-1 bg-black bg-opacity-50 rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="red" class="size-7">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                </button>
+                            </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <?php if (count($sidePhotos) < 2): ?>
+                        <!-- espaços vazios -->
+                        <div class="h-1/2"></div>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+
+            </div>
+
+
+        <div class="p-6 md:p-8">
+            
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                <?= htmlspecialchars($post->title) ?>
+            </h1>
+
+            <div class="prose max-w-none text-gray-700 mb-4">
+                <p><?= nl2br(htmlspecialchars($post->description)) ?></p>
+            </div>
+
+            <?php if ($username): ?>
+                <div class="flex items-center text-gray-600 mb-4">
+                    <span class="mr-4 px-3 py-1 bg-gray-100 text-gray-800 rounded-full font-mono text-xs">
+                        <span class="font-bold">Publicado por:</span> <?= htmlspecialchars($username->name) ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+
+        <div class="my-6 p-4 bg-gray-100 rounded-xl">
+
+            <?php if (!empty($occurrences)): ?>                
+                <h1 class="text-md md:text-xl font-bold text-gray-900 mb-4">Ocorrências registradas</h1>
+
+                <?php foreach ($occurrences as $oc): ?>
+                    <div class="p-3 bg-white border rounded-lg shadow-sm mb-3">
+                        <p class="text-gray-800">
+                            <strong>Local:</strong> <?= htmlspecialchars($oc->location) ?>
+                        </p>
+                        <?php if ($oc->description !== null && trim($oc->description) !== ''): ?>
+                            <p class="mt-1 text-gray-700">
+                                <strong>Descrição:</strong><br>
+                                <?= htmlspecialchars($oc->description) ?>
+                            </p>
+                        <?php endif; ?>
+                        <?php if ($oc->created_at !== null && trim($oc->created_at) !== ''): ?>
+                            <p class="mt-2 text-xs text-gray-500">
+                                <?= date('d/m/Y H:i', strtotime($oc->created_at)) ?>
+                            </p>
+                        <?php endif; ?>
+
+                        <?php if ($oc->user_id === $this->current_user->id): ?>
+                            <form action="<?= route('occurrences.destroy', ['id' => $oc->id]) ?>" 
+                                method="POST" class="mt-3">
+                                <input type="hidden" name="_method" value="DELETE">
+
+                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm">
+                                    Remover minha ocorrência
+                                </button>
+                            </form>
+                        <?php endif; ?>
+
+                    </div>
+                <?php endforeach; ?>
+
+            <?php else: ?>
+                <p class="text-gray-600 italic">Nenhuma ocorrência registrada para este post.</p>
+            <?php endif; ?>
+
+            <?php if (!$occurrence): ?>
+
+                <h1 class="text-md md:text-xl font-bold text-gray-900 mt-6 mb-4">Registrar Ocorrência</h1>
+
+                <form action="<?= route('occurrences.create') ?>" method="POST" class="space-y-3">
+                    <input type="hidden" name="post_id" value="<?= $post->id ?>">
+
+                    <div>
+                        <label class="font-semibold text-gray-700">Localização</label>
+                        <input type="text" name="location" required
+                            class="w-full mt-1 border rounded-lg p-2"
+                            placeholder="Ex: Rua Central, Bloco B">
+                    </div>
+
+                    <div>
+                        <label class="font-semibold text-gray-700">Descrição (opcional)</label>
+                        <textarea name="description"
+                            class="w-full mt-1 border rounded-lg p-2"
+                            placeholder="Informações adicionais"></textarea>
+                    </div>
+
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        Registrar Ocorrência
+                    </button>
+                </form>
+
+            <?php else: ?>
+
+                <h1 class="text-md md:text-xl font-bold text-gray-900 mt-6 mb-2">Minha Ocorrência</h1>
+
+                <div class="p-3 bg-white border rounded-lg shadow-sm mb-4">
+
+                    <p class="text-gray-800">
+                        <strong>Local:</strong> <?= htmlspecialchars($occurrence->location) ?>
+                    </p>
+
+                    <?php if (!empty($occurrence->description)): ?>
+                        <p class="mt-1 text-gray-700">
+                            <strong>Descrição:</strong><br>
+                            <?= nl2br(htmlspecialchars($occurrence->description)) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($occurrence->created_at)): ?>
+                        <p class="mt-2 text-xs text-gray-500">
+                            <?= date('d/m/Y H:i', strtotime($occurrence->created_at)) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <form action="<?= route('occurrences.destroy', ['id' => $occurrence->id]) ?>" 
+                        method="POST" class="mt-4">
+                        <input type="hidden" name="_method" value="DELETE">
+
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                            Remover Ocorrência
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        </div>
+
+            <div class="mt-2 pt-6 border-t">
+                <a href="<?= route('home.index') ?>" 
+                   class="bg-gray-300 text-gray-800 px-5 py-2 rounded-lg hover:bg-gray-400 transition">
+                    &larr; Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="w-full lg:w-20 sticky top-8 h-fit">
+        <ul class="flex flex-row lg:flex-col justify-around lg:gap-4 p-4 lg:p-0 bg-white lg:bg-transparent shadow-lg lg:shadow-none rounded-lg">
+            
+            <!-- update de imagens -->
+            <li>
+                <a href="<?= route('posts.edit', ['id' => $post->id])?>"
+                   class="flex flex-col items-center p-3 bg-white shadow-md rounded-lg text-gray-700 hover:bg-blue-500 hover:text-white transition-all duration-300 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
+                    </svg>
+                   <span class="text-xs mt-1 font-medium">Atualizar</span>
+                </a>
+            </li>
+
+            <!-- view da imagem -->
+            <li>
+            <a href="<?= $featuredPhoto ? htmlspecialchars($featuredPhoto->path) : '#' ?>" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="flex flex-col items-center p-3 bg-white shadow-md rounded-lg text-gray-700 hover:bg-gray-800 hover:text-white transition-all duration-300 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                    </svg>                    
+                    <span class="text-xs mt-1 font-medium">Expandir</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</main>
