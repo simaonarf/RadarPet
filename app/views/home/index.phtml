@@ -1,16 +1,14 @@
 <form class="max-w-md mx-auto">   
-<!--     <label for="search" class="block mb-2.5 text-sm font-medium text-heading text-black sr-only ">Search</label> -->
     <div class="relative">
         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
         </div>
-        <input type="search" id="search" class="block w-full p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-md focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" required />
-<!--         <button type="button" class="bg-blue-700 absolute end-1.5 bottom-1.5 text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-md text-xs px-3 py-1.5 focus:outline-none">Search</button> -->
+        <input type="search" id="search" placeholder="Ex: Cap..." class="block w-full p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-md focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" />
     </div>
 </form>
 
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 m-10 mb-50 ">
+<div id="posts-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 m-10 mb-50 ">
             <?php foreach ($posts as $post): ?>
                 <div class="bg-white p-5 rounded-md shadow-lg w-full max-w-sm mx-auto">
 
@@ -48,3 +46,4 @@
 
 <?php $paginator->renderPagesNavigation(); ?>
 
+<script src="/assets/js/search.js"></script>
