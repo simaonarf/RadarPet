@@ -329,6 +329,36 @@ abstract class Model
         return $models;
     }
 
+    public static function findByTitleLike (string $keyword): array
+    {
+        $models = [];
+
+        $searchAttribute = 'title'; 
+
+        $attributes = implode(', ', static::$columns);
+        $table = static::$table;
+
+        $sql = <<<SQL
+            SELECT id, {$attributes} FROM {$table} WHERE {$searchAttribute} LIKE :keyword ORDER BY register_date DESC;
+        SQL;
+
+        $pdo = Database::getDatabaseConn();
+        $stmt = $pdo->prepare($sql);
+
+        $searchKeyword = $keyword . '%'; 
+
+        $stmt->bindParam(':keyword', $searchKeyword, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $resp = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($resp as $row) {
+            $models[] = new static($row);
+        }
+
+        return $models;
+    }
+
     /**
      * @param array<string, mixed> $conditions
      */
