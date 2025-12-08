@@ -15,6 +15,8 @@ Route::get('/posts/index', [PostController::class, 'index'])->name('posts.index'
 
 Route::get('/api/posts/search', [PostController::class, 'search'])->name('api.posts.search');
 
+Route::get('/posts/index', [PostController::class, 'index'])->name('posts.index');
+
 // ROTAS DE AUTENTICACAO
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
