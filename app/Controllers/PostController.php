@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+
+use Core\Database\ActiveRecord\Model;
 use App\Models\Post;
 use App\Models\PostPhoto;
 use App\Models\PostUserOccurrence;
@@ -37,7 +39,29 @@ class PostController extends Controller
             $this->render('posts/index', compact('paginator', 'title', 'posts'));
         }
     }
+    public function search(Request $request): void
+    {
+        $keyword = $request->getParam('q', '');
 
+        if (strlen($keyword) < 2) {
+            $this->renderJson('posts/search', ['posts' => []]);
+            return;
+        }
+
+        try {
+            $posts = Post::findByTitleLike($keyword);
+
+            $this->renderJson('posts/search', ['posts' => $posts]);
+
+        } catch (Throwable $e) {
+            error_log("Erro na Busca AJAX: " . $e->getMessage());
+            
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode(['error' => 'Falha interna ao processar a busca.']);
+            exit;
+        }
+    }
 
     public function new(Request $request): void
     {

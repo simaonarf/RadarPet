@@ -8,7 +8,12 @@ use App\Controllers\PostController;
 use App\Controllers\PostOccurrencesController;
 
 // ROTAS PÚBLICAS
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');/* 
+Route::post('/search', [HomeController::class, 'search'])->name('home.search'); */
+
+Route::get('/posts/index', [PostController::class, 'index'])->name('posts.index');
+
+Route::get('/api/posts/search', [PostController::class, 'search'])->name('api.posts.search');
 
 Route::get('/posts/index', [PostController::class, 'index'])->name('posts.index');
 

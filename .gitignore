@@ -11,6 +11,9 @@ html
 # Ignore vendor folder
 /vendor/
 
+# Ignore vendor folder
+node_modules/
+
 # Ignore cache folder
 .cache/*
 

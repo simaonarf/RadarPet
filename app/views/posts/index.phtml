@@ -1,14 +1,5 @@
-<form class="max-w-md mx-auto">   
-    <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
-        </div>
-        <input type="search" id="search" placeholder="Ex: Cap..." class="block w-full p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-md focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" />
-    </div>
-</form>
-
-
-<div id="posts-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 m-10 mb-50 ">
+    <h1 class="text-black text-2xl ml-10 font-bold"><?= htmlspecialchars($title)?></h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 m-10 mb-50 ">
             <?php foreach ($posts as $post): ?>
                 <div class="bg-white p-5 rounded-md shadow-lg w-full max-w-sm mx-auto">
 
@@ -23,14 +14,12 @@
                     <h3 class="font-bold text-xl pb-2 pt-4"><?= htmlspecialchars($post->title) ?></h3>
                     <p class="text-gray-600"><?= htmlspecialchars($post->description) ?></p>
                     
-                    <!-- Container para os botões -->
                     <div class="flex space-x-4 mt-4">                          
-                        <!-- Formulário de delete -->
                         <form action="<?= route('posts.destroy', ['id' => $post->id]) ?>" method="POST" class="m-0">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="bg-red-200 text-red-700 px-5 py-2 rounded-lg hover:bg-red-700 hover:text-red-200 transition">Delete</button>
                         </form>
-                        <!-- Link de edit -->
+
                         <a href="<?= route('posts.edit', ['id' => $post->id]) ?>">
                             <button type="button" class="bg-blue-200 text-blue-700 px-5 py-2 rounded-lg hover:bg-blue-700 hover:text-blue-200 transition">Edit</button>
                         </a>
@@ -46,4 +35,3 @@
 
 <?php $paginator->renderPagesNavigation(); ?>
 
-<script src="/assets/js/search.js"></script>
